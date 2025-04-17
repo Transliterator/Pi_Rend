@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monte Carlo Pi Simulation</title>
+    <style>
+        body {
+            font-family: 'Trebuchet MS', sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f0f8ff;
+            color: #003366;
+        }
+        h1 {
+            font-size: 48px;
+            color: #FF4500;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 18px;
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e03e00;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .result, .deviation {
+            display: inline-block;
+            width: 100px;
+            margin: 10px;
+            font-size: 20px;
+        }
+        .red {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Monte Carlo Pi Simulation</h1>
+    <input type="number" id="numCycles" placeholder="Enter cycles" min="1" />
+    <button onclick="generatePi()">Generate Pi</button>
+
+    <div class="results">
+        <div id="resultsRow"></div>
+        <div id="deviationRow"></div>
+    </div>
+
+    <script>
+        function generatePi() {
+            const numPoints = parseInt(document.getElementById('numCycles').value);
+            const resultsRow = document.getElementById('resultsRow');
+            const deviationRow = document.getElementById('deviationRow');
+            resultsRow.innerHTML = '';
+            deviationRow.innerHTML = '';
+
+            if (isNaN(numPoints) || numPoints <= 0) {
+                alert("Please enter a valid number of cycles.");
+                return;
+            }
+
+            for (let j = 0; j < 10; j++) {
+                let insideCircle = 0;
+
+                for (let i = 0; i < numPoints; i++) {
+                    const x = Math.random();
+                    const y = Math.random();
+
+                    if (x * x + y * y <= 1) {
+                        insideCircle++;
+                    }
+                }
+
+                const estimatedPi = (insideCircle / numPoints) * 4;
+                const deviation = ((estimatedPi / Math.PI) - 1) * 100;
+
+                resultsRow.innerHTML += `<div class="result">${estimatedPi.toFixed(6)}</div>`;
+                const deviationClass = (deviation > 5 || deviation < -5) ? 'red' : '';
+                deviationRow.innerHTML += `<div class="deviation ${deviationClass}">${deviation.toFixed(2)}%</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
