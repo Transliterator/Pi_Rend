@@ -1,9 +1,10 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Monte Carlo Pi Simulation</title>
     <style>
         body {
@@ -49,6 +50,18 @@
         .red {
             color: red;
         }
+        .illustration-section {
+            margin-top: 60px;
+        }
+        canvas {
+            border: 2px solid #003366;
+            margin-top: 20px;
+        }
+        .formula {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -59,6 +72,13 @@
     <div class="results">
         <div id="resultsRow"></div>
         <div id="deviationRow"></div>
+    </div>
+
+    <!-- Незалежна ілюстрація -->
+    <div class="illustration-section">
+        <h2>Visual Illustration</h2>
+        <canvas id="visualCanvas" width="400" height="400"></canvas>
+        <div class="formula">π ≈ 4 × (N<sub>circle</sub> / N<sub>total</sub>)</div>
     </div>
 
     <script>
@@ -93,7 +113,43 @@
                 const deviationClass = (deviation > 5 || deviation < -5) ? 'red' : '';
                 deviationRow.innerHTML += `<div class="deviation ${deviationClass}">${deviation.toFixed(2)}%</div>`;
             }
+
+            drawIllustration(numPoints); // оновити ілюстрацію з тією ж кількістю точок
         }
+
+        function drawIllustration(pointCount) {
+            const canvas = document.getElementById('visualCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const radius = width / 2;
+            const centerX = width / 2;
+            const centerY = height / 2;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Намалювати коло
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#003366';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Намалювати точки
+            for (let i = 0; i < pointCount; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+
+                ctx.fillStyle = '#555'; // сірий
+                ctx.fillRect(x, y, 2, 2);
+            }
+        }
+
+        // Початкова ілюстрація зі 100 точками
+        window.onload = function () {
+            drawIllustration(100);
+        };
     </script>
 </body>
 </html>
+
